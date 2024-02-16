@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="dashboard.component.css">
+<div class="teachingseafarermain">
+    <div class="teachingseafarermain1">
+
+
+        <div>
+            <pre style="margin-bottom: 0px;">
+<span class="colregsheader" >COLREGS</span>
+<span style="font-weight: 600;font-size: 20px;margin-left: 5px;">Re-Imagined</span>
+            </pre>
+
+
+        </div>
+
+
+        <div class="courssecategoriesdiv2">
+            <h5>
+                <span style="color: #3194a0;font-weight: bold;">Welcome </span> to our revolutionary app designed to
+                enhance the learning
+                and assessment
+                experience for seafarers navigating the complexities of COLREGS (International Regulations for
+                Preventing Collisions at Sea). Immerse yourself in a cutting-edge educational journey,
+                featuring meticulously crafted 3D animations presenting various COLREGS scenarios from
+                multiple angles. Our app offers an interactive platform where candidates can watch these
+                immersive videos and test their knowledge through thought-provoking questions. With meticulously
+                developed scenarios and more in the pipeline, embark on a voyage of knowledge and mastery.
+                Join us as we redefine maritime education and safety standards. Welcome aboard!
+            </h5>
+
+            <div class="assesment-button-container">
+                <button style="background-color: #3194a0;
+          color: white;
+          /* height: 50px; */
+          padding: 13px 16px;
+          align-items: center;
+          /* width: 150px; */
+          border-radius: 5px;
+          border: none;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 700;
+          cursor: pointer;
+          margin-top: 30px;" (click)="Course()" class="start-button4">
+                    Start Course
+                </button>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="teachingseafarermain2">
+        <div class="teachingseafarermain2box">
+
+
+
+            <div style="
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px #cbd5e1 solid;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            display: inline-flex;
+          ">
+
+                <div style="
+             
+              justify-content: center;
+              align-items: center;
+              gap: 10px;
+              display: inline-flex;
+            ">
+                    <!-- <div style="padding-top: 24px; padding-bottom: 24px; padding-left: 28px; padding-right: 20px; opacity: 0.80; background: rgba(18, 22, 25, 0.75); border-radius: 100px; justify-content: center; align-items: center; display: flex">
+                      <div style="width: 96px; height: 96px; position: relative">
+                          <div style="width: 64px; height: 72px; left: 16px; top: 12px; position: absolute; background: white"></div>
+                      </div>
+                  </div> -->
+
+                    <video poster="assets/images/demothumbnail.jpg" #videoPlayer id="videoPlayer" loop autoplay
+                        class="videoplayer">
+                        <source src="assets/videos/Trailer/COLREGS Re-Imagined Teaser.mp4" type="video/mp4" />
+
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- <img src="assets/images/demothumbnail.jpg" style="object-fit: fill;height:400px ;width: 600px;" alt=""> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

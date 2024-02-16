@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+    integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous" />
+</head>
+
+<body>
+  <nz-header class="defaultheader" style="background-color: #0F172A">
+
+    <div class="header-img">
+      <img src="assets/images/Logo with Name to right - Full Colour.png" (click)="Course()" alt=""
+        style="height: 40px; width: 200px; cursor: pointer;" />
+
+
+    </div>
+
+
+
+    <div class="header-dropdown">
+      <span style="
+                border-radius: 50%;
+                background-color: #f2f2f2;
+                padding: 8px;
+                font-size: 15px;
+                color: gray;
+              " nz-icon nzType="user" nzTheme="outline"></span>
+      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="font-size: 18px; color: white; ">
+        <span class="username">{{ Username }}</span>
+        <span class="dropdownicon" nz-icon nzType="down"></span>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu style="display: flex; flex-direction: column">
+
+          <li nz-menu-item (click)="logout()">
+            <span nz-icon nzType="logout" nzTheme="outline"></span>
+            <!-- <img src="assets/icons/category.svg" alt=""  > -->
+            <span style="padding-left: 10px">Logout</span>
+          </li>
+          <!-- <li nz-menu-item (click)="toggleTheme()">
+                  <span nz-icon nzType="skin" nzTheme="fill"></span>
+                  <img src="assets/icons/category.svg" alt=""  >
+                  <span style="padding-left: 10px">Change Theme</span>
+                </li> -->
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </nz-header>
+
+  <nz-content>
+    <router-outlet></router-outlet>
+  </nz-content>
+
+
+
+
+
+
+
+
+  <nz-footer>
+    <div style="background-color: #0F172A;">
+      <div class="footerimage" style="background-color: #0F172A;">
+        <div style="text-align: center">
+          <img src="assets/images/Logo with Name and Slogan - White Fill.png" alt=""
+            style="height: 60px; width: 300px" />
+        </div>
+
+        <div class="socialmedia" style="text-align: center; margin-right: 0px">
+          <ul style="display: flex">
+            <li>
+              <a href="#"> <i class="fab fa-facebook-f icon"></i> </a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-twitter icon"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-linkedin-in icon"></i></a>
+            </li>
+            <li>
+              <a href="#"><i class="fab fa-instagram icon"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="text-align: center;background-color: #0F172A;">
+        <div style="
+                color: #828282;
+                font-size: 14px;
+                font-family: Poppins;
+                font-weight: 400;
+                line-height: 21px;
+                word-wrap: break-word;
+              ">
+          Copyright © 2024 || All Rights Reserved
+        </div>
+      </div>
+    </div>
+  </nz-footer>
+</body>
+
+</html>

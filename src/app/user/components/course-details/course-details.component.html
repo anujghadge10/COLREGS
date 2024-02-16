@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="maindiv" [ngStyle]="{ 'background-color': isDarkTheme ? '#161616' : 'white' }">
+
+        <div class="videoplayer" *ngIf="!courseCompleted">
+
+            <!-- video player -->
+            <div class="image-container" *ngIf="showVideo">
+
+                <vg-player [class.hovered]="isHovered" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()"
+                    (onPlayerReady)="onPlayerReady($event)"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 10px;">
+                    <vg-overlay-play *ngIf="!isradarvisible"></vg-overlay-play>
+                    <vg-buffering vgFor="singlevideo"></vg-buffering>
+
+                    <!-- Custom buttons for zoom in and zoom out -->
+                    <div class="customvgbtns" [@fadeInOut]="isHovered ? 'in' : 'out'" class="customvgbtns"
+                        *ngIf="isHovered"
+                        style="position: absolute; bottom: 0.1px; z-index: 999;display: flex;justify-content: space-between;">
+                        <button (click)="Leftvideo()" title="Port side view" *ngIf="isZoomin"> <img
+                                src="assets/icons/iconsbuttons/SI_Cameras.png" alt=""></button>
+
+                        <button title="ECDIS information"
+                            style="font-family:monospace;display: flex;align-items: center;" *ngIf="isZoomin"
+                            (click)="ecdis()"><img src="assets/icons/iconsbuttons/SI_ECDIS.png" alt=""></button>
+
+
+
+                        <button title="Binocular view" style="font-family:monospace;display: flex;align-items: center;"
+                            *ngIf="isZoomin" (click)="zoomIn()"><img src="assets/icons/iconsbuttons/SI_Binacular.png"
+                                alt=""></button>
+
+
+                        <button title="Top view (From Monkey Island)"
+                            style="font-family:monospace;display: flex;align-items: center;" *ngIf="isZoomin"
+                            (click)="monkeyview()"><img src="assets/icons/iconsbuttons/SI-09.png" alt=""></button>
+
+                        <button title="Stern view" style="font-family:monospace;display: flex;align-items: center;"
+                            *ngIf="isZoomin" (click)="backviewcamera()"><img src="assets/icons/iconsbuttons/SI-08.png"
+                                alt=""></button>
+
+                        <button title="Objectives" style="font-family:monospace;display: flex;align-items: center;"
+                            *ngIf="isZoomin" (click)="objective()"><img
+                                src="assets/icons/iconsbuttons/SI_Objectives.png" alt=""></button>
+
+                        <button title="Radar information"
+                            style="font-family:monospace;display: flex;align-items: center;" *ngIf="isZoomin"
+                            (click)="Radar()"><img src="assets/icons/iconsbuttons/SI_RADAR.png" alt=""></button>
+
+                        <button title="Startboard side view"
+                            style="font-family:monospace;display: flex;align-items: center;" *ngIf="isZoomin"
+                            (click)="rightvideo()"><img src="assets/icons/iconsbuttons/SI-06.png" alt=""></button>
+
+
+
+                        <button title="Bridge view" style="font-family:monospace;display: flex;align-items: center;"
+                            *ngIf="isZoomout" (click)="zoomOut()"><img src="assets/icons/iconsbuttons/SI-07.png"
+                                alt=""></button>
+                        <button title="Bridge view" style="font-family:monospace;display: flex;align-items: center;"
+                            *ngIf="isgoback" (click)="goback()"><img src="assets/icons/iconsbuttons/SI-07.png"
+                                alt=""></button>
+
+
+
+
+                        <!-- <button style="font-family:monospace;display: flex;align-items: center;" *ngIf="isZoomin"
+                            (click)="toggleTheme()">
+                            <span *ngIf="!isDarkTheme">Night Mode</span>
+                            <span *ngIf="isDarkTheme">Day Mode</span>
+                        </button> -->
+                    </div>
+
+                    <vg-controls [@fadeInOut]="isHovered ? 'in' : 'out'" (mouseenter)="onMouseEnter()"
+                        (mouseleave)="onMouseLeave()" class="videocontrolfullscreen">
+                        <vg-fullscreen>
+                        </vg-fullscreen>
+                    </vg-controls>
+                    <vg-controls class="vgcontrolsmain" [class.endFullScreen]="isradarvisible"
+                        [@fadeInOut]="isHovered ? 'in' : 'out'" *ngIf="isHovered">
+
+
+                        <vg-play-pause *ngIf="!isradarvisible"></vg-play-pause>
+                        <!-- <vg-playback-button></vg-playback-button> -->
+                        <vg-time-display *ngIf="!isradarvisible" vgProperty="current"
+                            vgFormat="mm:ss"></vg-time-display>
+                        <vg-scrub-bar *ngIf="!isradarvisible" style="pointer-events: none;">
+                            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                            <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+                        </vg-scrub-bar>
+                        <vg-time-display *ngIf="!isradarvisible" vgProperty="left" vgFormat="mm:ss"></vg-time-display>
+                        <!-- <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display> -->
+                        <!-- <vg-track-selector></vg-track-selector> -->
+                        <vg-mute *ngIf="!isradarvisible"></vg-mute>
+                        <vg-volume *ngIf="!isradarvisible"></vg-volume>
+                    </vg-controls>
+
+
+                    <video *ngIf="!isradarvisible" [vgMedia]="$any(videoPlayer)" (ended)="onVideoEnded()" #videoPlayer
+                        id="singlevideo" preload crossorigin>
+                    </video>
+                    <video *ngIf="isradarvisible" [poster]="radarImage" [vgMedia]="$any(videoPlayer1)" #videoPlayer1
+                        id="singlevideo1" preload crossorigin>
+                    </video>
+                </vg-player>
+
+            </div>
+
+
+            <!-- rewatch video -->
+
+            <div class="image-container" *ngIf="showRewatchandAssessment">
+                <div class="overlayCourse"></div>
+                <img src="assets/images/end2.png" alt="" style="position: absolute;
+               top: 0;
+               left: 0;
+               width: 100%;
+               object-fit: cover;
+               height: 100%;border-radius: 10px;">
+
+
+                <div class="rewatch-video-container">
+                    <button nzTooltipTitle="Rewatch" (click)="rewatchVideo()" class="start-button3"
+                        style="background-color: transparent;">
+                        <img src="assets/icons/refresh.svg" alt="" />
+                    </button>
+                </div>
+
+                <div class="assesment-button-container">
+                    <button (click)="StartAssesment()" class="start-button4">
+                        Start Assesment
+                    </button>
+                </div>
+
+                <!-- <div class="nextButton">
+                    <button (click)="playNextVideo()"><span nz-icon nzType="right" nzTheme="outline"
+                            style="color: #fff"></span></button>
+
+
+                </div> -->
+
+            </div>
+
+
+        </div>
+
+
+        <div class="videoplayer" *ngIf="courseCompleted">
+            <div class="image-container" *ngIf="showRewatchandAssessment">
+                <div class="overlayCourse"></div>
+                <img src="assets/images/end.jpg" alt="" style="position: absolute;
+               top: 0;
+               left: 0;
+               width: 100%;
+               object-fit: cover;
+               height: 100%;border-radius: 10px;">
+
+
+
+
+                <!-- <div class="nextButton">
+                    <button (click)="playNextVideo()"><span nz-icon nzType="right" nzTheme="outline"
+                            style="color: #fff"></span></button>
+
+
+                </div> -->
+
+            </div>
+        </div>
+
+
+
+        <div class="contentlist" [ngStyle]="{ 'background-color': isDarkTheme ? '#161616' : 'white' }">
+            <h3 style="font-size: 20px;font-weight: 700;">Course Content</h3>
+
+
+
+            <div [style.background-color]="currentVideoIndex == video.index ? 'rgb(240, 240, 240)' : 'transparent'"
+                [style.box-shadow]="currentVideoIndex == video.index ? '0 4px 4px rgba(0,0,0,0.6)' : 'none'"
+                [style.border]="currentVideoIndex == video.index ? '2px solid gray' : '1px solid gray'"
+                *ngFor="let video of dayVideoArray" class="coursecontentcard" [class.disabled]="video.isDisabled"
+                (click)="playSelectedVideo(video)"
+                [ngStyle]="{ 'background-color': isDarkTheme ? '#161616' : 'white' }">
+                <div style="width: 40%;display: flex;align-items: center;justify-content: start;
+                  object-fit: cover;
+                  cursor: pointer;
+  width: 45%;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s; ">
+                    <div class="img-container">
+
+                        <video class="coursecontentimage" [src]="video.src"></video>
+                    </div>
+
+                    <div class="button-container2">
+
+                        <button style="background-color: transparent;border: none;cursor: pointer;"><img
+                                style="width: 45px;" class="playButton" src="assets/icons/play-circle.svg"
+                                alt=""></button>
+                    </div>
+                </div>
+
+                <div style="width: 50%;display: flex;align-items: start;flex-direction: column;">
+                    <h3 style="font-weight: 700; font-size: 18px;"
+                        [style.color]="currentVideoIndex == video.index ? '#3194a0' : 'black'">
+                        {{video.videotitle}}</h3>
+                    <div style="width: 100%;">
+                        <div style="display: flex;justify-content: space-between;">
+                            <div style="color: #828282;
+                                            font-size: 12px;
+                                            font-family: Calibri;
+                                            font-weight: 400;">Progress</div>
+                            <div>{{video.progressPercentage}} %</div>
+                        </div>
+
+                        <nz-progress style="height:80%; margin-bottom: 10px;" nzSize="small"
+                            [nzStrokeColor]="{ '0%': '#3194A0', '100%': '#3194A0' }"
+                            [nzPercent]="video.progressPercentage" [nzShowInfo]="false"></nz-progress>
+                    </div>
+                    <span style="color: red;"
+                        *ngIf="!video.isAssessmentCompleted && !video.isDisabled && video.progressPercentage === 100">Assessment
+                        Pending</span>
+                    <span style="color:green;" *ngIf="video.isAssessmentCompleted && !video.isDisabled">Assessment
+                        Completed</span>
+                    <h3></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- objectives modal -->
+    <nz-modal class="custom-modal" [(nzVisible)]="isObjectiveVisible" nzOkText="Add" nzCancelText="Cancel"
+        nzCentered=true nzWidth=700px style="height: 100%;width: 100%;overflow-y: auto" nzCentered [nzFooter]="null"
+        (nzOnCancel)="closeobjectivemodal()">
+        <div *nzModalContent style="height: 100%;width: 100%;overflow-y: auto">
+
+            <div class="result-container">
+                <div class="rule-container">
+
+                    <div style="background-color: #EAF4F5;padding: 25px;overflow-y: auto;border-radius: 5px;"
+                        class="container">
+
+                        <div class="rule-content">
+                            <h2>Objectives:</h2>
+                            <h4>Upon completing this introductory level, participants will
+                                demonstrate their capability
+                                to discern and comprehend the correct navigational protocol within an ambiguous maritime
+                                scenario, adhering to the International Regulations for Preventing Collisions at Sea
+                                (COLREGs). Points will be awarded for selecting the correct course of action on their
+                                initial attempt, without explicit identification of the scenario.</h4>
+                        </div>
+                        <div class="rule-content" style="padding-bottom: 0px">
+                            <h2>Instructions:</h2>
+                            <h4>In order to achieve this objective, participants are encouraged to utilize the various
+                                video perspectives available. Here's how to use them effectively:</h4>
+                        </div>
+
+                        <div style="margin:0px 35px;">
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">1.Bridge View:</h2>
+                                <h4>Click on the "Bridge View" to see the situation from the ship's bridge. Observe the
+                                    surroundings carefully.</h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">2.Monkey Island View:</h2>
+                                <h4>Use the "Monkey Island View" to gain a different perspective from a higher vantage
+                                    point.</h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">3.Port Side View:</h2>
+                                <h4>Click on "Port Side View" to view the scenario from the left side of the ship.</h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">4.Starboard Side View:</h2>
+                                <h4>Select "Starboard Side View" to see the situation from the right side of the ship.
+                                </h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">5.Stern View:</h2>
+                                <h4>Click on "Stern View" to observe the scenario from the back of the ship.</h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">6.Radar Screen:</h2>
+                                <h4>For additional information, examine the static image of the "Radar Screen"
+                                    displaying the target's position.</h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">7.ECDIS Screen:</h2>
+                                <h4>Gain insights into the local area by reviewing the static image of the "ECDIS
+                                    Screen."</h4>
+                            </div>
+                            <div class="rule-content" style="padding: 0px;">
+                                <h2 style="font-size: 18px;">8.Binocular View:</h2>
+                                <h4>Zoom in on the target by choosing the "Zoomed in Binocular View."</h4>
+                            </div>
+                        </div>
+
+                        <div class="rule-content" style="padding-bottom: 0px">
+
+                            <h4>Remember, the key challenge is to identify the correct navigational protocol based on
+                                these views without explicit scenario information. Participants should pay close
+                                attention to the details in each view to make the right decision on their first attempt.
+                                Successful completion of the level will earn them points while maintaining the element
+                                of ambiguity within the scenario.</h4>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </nz-modal>
+</body>
+
+</html>
